@@ -8,6 +8,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -46,25 +47,8 @@
         </div>
       </div>
     </nav>
-
     <!-- Contenedor de la galería -->
     <div class="container mt-4 seccion" id="galeriaContainer">
-      <!-- Modal de éxito -->
-      <div
-        class="modal fade"
-        id="successModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content bg-dark text-white text-center">
-            <div class="modal-body">
-              <h5 class="text-success">✅ Se guardó exitosamente</h5>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- 🔄 Loader -->
       <div id="loader" class="text-center mt-5">
         <div class="spinner-border text-primary" role="status"></div>
@@ -193,8 +177,22 @@
         </div>
       </div>
     </div>
+    <!-- Modal de éxito -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content custom-success-modal">
+          <div class="modal-body">
+            <div class="mb-3">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h5>¡Se guardó exitosamente!</h5>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="JS.js"></script>
   </body>
 </html>

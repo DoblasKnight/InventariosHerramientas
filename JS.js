@@ -125,7 +125,6 @@ document
           document.getElementById("successModal")
         );
         successModal.show();
-
         // 🔹 Restaurar botón y ocultar modal después de 2.5s
         setTimeout(() => {
           document.getElementById("btnSpinner").classList.add("d-none");

@@ -58,7 +58,17 @@ body {
 label {
   color: white;
 }
-#successModal .modal-content {
-  background-color: #212529 !important; /* fondo oscuro */
-  color: #fff !important; /* texto blanco */
+/* Estilos del modal de éxito */
+.custom-success-modal {
+  background-color: #161616; /* gris clarito */
+  text-align: center;
+  border: none;
+  border-radius: 12px; /* bordes redondeados */
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+.custom-success-modal h5 {
+  font-weight: bold;
+  color: #ffffff; /* gris oscuro casi negro */
+  margin-top: 10px;
 }
