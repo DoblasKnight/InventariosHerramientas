@@ -7,17 +7,16 @@
 .card {
   flex: 1 1 calc(50% - 20px); /* 2 por fila */
 }
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #121212;
-    color: white;
-  }
-}
 
 @media (max-width: 600px) {
   .card {
-    flex: 1 1 100%;
+    flex: 1 1 100%; /* En móvil se hace 1 por fila */
   }
+}
+
+body {
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
 }
 
 .navbar-brand {
