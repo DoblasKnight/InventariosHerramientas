@@ -20,6 +20,7 @@ const herramientas = [
   { nombre: "Pelacables", ext: "png" },
   { nombre: "Formon", ext: "jpg" },
   { nombre: "Hombre Solo", ext: "jpg" },
+  { nombre: "Nivel", ext: "jpg" },
 ];
 const scriptURL_GET =
   "https://script.google.com/macros/s/AKfycbzfq7k_ykW3spLqr48cUjvqUhVJAmGfpFkG7qZ0ywAyam_cmr1cTXbLAPxM3NdlOSBe/exec";
