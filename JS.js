@@ -107,7 +107,9 @@ document
       fecha,
       reemplazos,
     });
-
+    document.getElementById("btnSpinner").classList.remove("d-none");
+    document.getElementById("btnText").textContent = "Guardando...";
+    document.getElementById("btnAgregar").disabled = true; // evita doble clic
     fetch(`${scriptURL}?${params.toString()}`)
       .then((response) => response.text())
       .then(() => {

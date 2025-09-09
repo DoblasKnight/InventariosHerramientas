@@ -133,8 +133,14 @@
           <label for="reemplazos" class="form-label">Reemplazos</label>
           <input type="number" class="form-control" id="reemplazos" required />
         </div>
-        <button type="submit" class="btn btn-primary">
-          Agregar herramienta
+        <button id="btnAgregar" type="submit" class="btn btn-primary">
+          <span id="btnText">Agregar herramienta</span>
+          <span
+            id="btnSpinner"
+            class="spinner-border spinner-border-sm ms-2 d-none"
+            role="status"
+            aria-hidden="true"
+          ></span>
         </button>
       </form>
     </div>
