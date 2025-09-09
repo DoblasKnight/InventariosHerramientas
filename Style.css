@@ -7,10 +7,15 @@
     flex: 1 1 100%; /* En móvil se hace 1 por fila */
   }
 }
-
-body {
-  background-color: #ffffff;
+h5 {
+  color: white;
+}
+p {
   color: black;
+}
+body {
+  background-color: #000000;
+  color: #ffffff;
   font-family: Arial, sans-serif;
 }
 
@@ -29,7 +34,7 @@ body {
 
 .card:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 12px rgb(255, 255, 255);
 }
 
 .card img {
@@ -42,4 +47,11 @@ body {
   text-align: center;
   font-size: 1.1rem;
   font-weight: bold;
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: #ffffff !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #cccccc !important;
 }
