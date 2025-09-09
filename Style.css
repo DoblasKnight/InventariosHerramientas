@@ -55,7 +55,6 @@ body {
 .navbar-dark .navbar-nav .nav-link:hover {
   color: #ffffff !important;
 }
-.navbar-dark .navbar-nav .nav-link.active {
-  color: #ff0000 !important;
+.nav-link.active {
   font-weight: bold;
 }
