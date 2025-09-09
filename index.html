@@ -59,39 +59,6 @@
         <!-- Cards de herramientas se generarán aquí -->
       </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="infoModal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 id="modalNombre" class="modal-title"></h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body text-center">
-            <!-- Imagen grande -->
-            <img
-              id="modalImagen"
-              src=""
-              class="img-fluid mb-3 rounded shadow"
-            />
-
-            <p><strong>Estado:</strong> <span id="modalEstado"></span></p>
-            <p>
-              <strong>Descripción:</strong> <span id="modalDescripcion"></span>
-            </p>
-            <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
-            <p>
-              <strong>Reemplazos:</strong> <span id="modalReemplazos"></span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Formulario para ingresar nueva herramienta -->
     <div class="container mt-4 seccion" id="ingresar" style="display: none">
       <h2>Ingresa nueva herramienta</h2>
@@ -145,10 +112,10 @@
       </form>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="infoModal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+    <!-- Modal de Información -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content custom-info-modal">
           <div class="modal-header">
             <h5 id="modalNombre" class="modal-title"></h5>
             <button
@@ -159,12 +126,7 @@
           </div>
           <div class="modal-body text-center">
             <!-- Imagen grande -->
-            <img
-              id="modalImagen"
-              src=""
-              class="img-fluid mb-3 rounded shadow"
-            />
-
+            <img id="modalImagen" src="" class="img-fluid mb-3" />
             <p><strong>Estado:</strong> <span id="modalEstado"></span></p>
             <p>
               <strong>Descripción:</strong> <span id="modalDescripcion"></span>
@@ -177,6 +139,7 @@
         </div>
       </div>
     </div>
+
     <!-- Modal de éxito -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered">

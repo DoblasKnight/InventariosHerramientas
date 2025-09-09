@@ -117,15 +117,15 @@ document
     fetch(`${scriptURL}?${params.toString()}`)
       .then((response) => response.text())
       .then(() => {
-        // 🔹 Limpiar formulario
+        //  Limpiar formulario
         document.getElementById("formHerramienta").reset();
 
-        // 🔹 Mostrar modal de éxito
+        //  Mostrar modal de éxito
         const successModal = new bootstrap.Modal(
           document.getElementById("successModal")
         );
         successModal.show();
-        // 🔹 Restaurar botón y ocultar modal después de 2.5s
+        //  Restaurar botón y ocultar modal después de 2.5s
         setTimeout(() => {
           document.getElementById("btnSpinner").classList.add("d-none");
           document.getElementById("btnText").textContent =
