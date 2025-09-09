@@ -58,3 +58,7 @@ body {
 label {
   color: white;
 }
+#successModal .modal-content {
+  background-color: #212529 !important; /* fondo oscuro */
+  color: #fff !important; /* texto blanco */
+}

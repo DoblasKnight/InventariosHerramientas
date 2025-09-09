@@ -91,6 +91,7 @@ document
   .getElementById("formHerramienta")
   .addEventListener("submit", function (event) {
     event.preventDefault();
+
     const nombre = document.getElementById("nombre").value;
     const estado = document.getElementById("estado").value;
     const descripcion = document.getElementById("descripcion").value;
@@ -107,21 +108,43 @@ document
       fecha,
       reemplazos,
     });
+
+    // 🔹 Mostrar spinner y bloquear botón
     document.getElementById("btnSpinner").classList.remove("d-none");
     document.getElementById("btnText").textContent = "Guardando...";
-    document.getElementById("btnAgregar").disabled = true; // evita doble clic
+    document.getElementById("btnAgregar").disabled = true;
+
     fetch(`${scriptURL}?${params.toString()}`)
       .then((response) => response.text())
       .then(() => {
-        alert("Herramienta agregada con éxito ✅\nActualizando información...");
         // 🔹 Limpiar formulario
         document.getElementById("formHerramienta").reset();
+
+        // 🔹 Mostrar modal de éxito
+        const successModal = new bootstrap.Modal(
+          document.getElementById("successModal")
+        );
+        successModal.show();
+
+        // 🔹 Restaurar botón y ocultar modal después de 2.5s
         setTimeout(() => {
+          document.getElementById("btnSpinner").classList.add("d-none");
+          document.getElementById("btnText").textContent =
+            "Agregar herramienta";
+          document.getElementById("btnAgregar").disabled = false;
+
+          successModal.hide();
           location.reload();
-        });
+        }, 2500);
       })
       .catch((error) => {
         console.error("Error al agregar herramienta:", error);
-        alert("Hubo un error al agregar la herramienta.");
+
+        alert("❌ Hubo un error al guardar la herramienta.");
+
+        // 🔹 Restaurar botón
+        document.getElementById("btnSpinner").classList.add("d-none");
+        document.getElementById("btnText").textContent = "Agregar herramienta";
+        document.getElementById("btnAgregar").disabled = false;
       });
   });
