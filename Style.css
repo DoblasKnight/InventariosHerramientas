@@ -11,7 +11,8 @@ h5 {
   color: white;
 }
 body {
-  background-color: #000000;
+  background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
+  background-attachment: fixed;
   color: #ffffff;
   font-family: Arial, sans-serif;
 }
