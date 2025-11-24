@@ -3,13 +3,8 @@ const SUPABASE_ANON_KEY = "sb_publishable_pYd42nEtQuJU7yX6eJuhMA_8wQCXA5m";
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Nombre del bucket de Storage que creaste para las imágenes
 const BUCKET_NAME = "imagenes-herramientas";
-// =================================================================
 
-// ... (El resto de tu código JS permanece igual)
-
-// Referencias del DOM
 const galeria = document.getElementById("galeria");
 const loader = document.getElementById("loader");
 const formHerramienta = document.getElementById("formHerramienta");
@@ -17,7 +12,6 @@ const btnAgregar = document.getElementById("btnAgregar");
 const btnText = document.getElementById("btnText");
 const btnSpinner = document.getElementById("btnSpinner");
 
-// Función de formato de fecha (la mantienes)
 function formatearFecha(fechaISO) {
   if (!fechaISO) return "Sin fecha";
   const d = new Date(fechaISO);
@@ -29,9 +23,6 @@ function formatearFecha(fechaISO) {
   });
 }
 
-// =================================================================
-// 📊 FUNCIÓN PARA OBTENER DATOS DE SUPABASE Y MOSTRAR GALERÍA
-// =================================================================
 async function cargarInventario() {
   loader.style.display = "block";
   galeria.innerHTML = "";
@@ -39,7 +30,7 @@ async function cargarInventario() {
   try {
     const { data: herramientas, error } = await supabase
       .from("herramientas")
-      .select("*"); // Obtiene todas las columnas
+      .select("*");
 
     if (error) throw error;
 
@@ -64,11 +55,10 @@ async function cargarInventario() {
   }
 }
 
-// Función para crear y adjuntar una card al DOM
 function crearCardHerramienta(herramienta) {
   const card = document.createElement("div");
   card.className = "col-md-3 mb-4";
-  const imagenUrl = herramienta.imagen_url || "placeholder.jpg"; // Usar URL de Supabase o un placeholder
+  const imagenUrl = herramienta.imagen_url || "placeholder.jpg";
   const nombre = herramienta.nombre;
 
   card.innerHTML = `
@@ -81,44 +71,40 @@ function crearCardHerramienta(herramienta) {
     `;
   galeria.appendChild(card);
 
-  // Event listener para mostrar el modal de información
   card.addEventListener("click", () => {
     const modal = new bootstrap.Modal(document.getElementById("infoModal"));
+    const nombre = herramienta.nombre;
+    const imagenUrl = herramienta.imagen_url || "placeholder.jpg";
 
+    // 💡 NUEVO: Llenar los campos editables y el ID
+    document.getElementById("modalId").value = herramienta.id; // ¡Guardamos el ID!
     document.getElementById("modalNombre").innerText = nombre;
     document.getElementById("modalImagen").src = imagenUrl;
     document.getElementById("modalImagen").alt = nombre;
 
-    document.getElementById("modalEstado").innerText =
-      herramienta.estado || "No definido";
-    document.getElementById("modalDescripcion").innerText =
-      herramienta.descripcion || "Sin descripción";
-    document.getElementById("modalFecha").innerText = formatearFecha(
-      herramienta.fecha
-    );
-    document.getElementById("modalReemplazos").innerText =
-      herramienta.reemplazos || "Ninguno";
+    document.getElementById("modalEstadoEditable").value =
+      herramienta.estado || "Bueno";
+    document.getElementById("modalDescripcionEditable").value =
+      herramienta.descripcion || "";
+    document.getElementById("modalReemplazosEditable").value =
+      herramienta.reemplazos || 0;
+
+    document.getElementById("modalNuevaImagen").value = "";
 
     modal.show();
   });
 }
 
-// Iniciar la carga del inventario al cargar el script
 cargarInventario();
 
-// =================================================================
-// 📤 MANEJO DEL FORMULARIO Y SUBIDA DE IMAGEN
-// =================================================================
 formHerramienta.addEventListener("submit", async function (event) {
   event.preventDefault();
 
-  // 1. Obtener datos del formulario, incluyendo la IMAGEN
   const nombre = document.getElementById("nombre").value.trim();
   const estado = document.getElementById("estado").value;
   const descripcion = document.getElementById("descripcion").value;
   const fecha = document.getElementById("fecha").value;
   const reemplazos = document.getElementById("reemplazos").value;
-  // ** CAMBIO CLAVE **: Obtener el archivo de imagen
   const imagenFile = document.getElementById("imagen").files[0];
 
   if (!imagenFile) {
@@ -130,16 +116,14 @@ formHerramienta.addEventListener("submit", async function (event) {
     return;
   }
 
-  // 2. 🔹 Mostrar spinner y bloquear botón
   btnSpinner.classList.remove("d-none");
   btnText.textContent = "Guardando...";
   btnAgregar.disabled = true;
 
   try {
     let imagen_url = "";
-    const fileName = `${Date.now()}_${imagenFile.name}`; // Nombre único para el archivo
+    const fileName = `${Date.now()}_${imagenFile.name}`;
 
-    // 2. Subir la imagen a Supabase Storage
     const { data: storageData, error: storageError } = await supabase.storage
       .from(BUCKET_NAME)
       .upload(fileName, imagenFile, {
@@ -149,14 +133,11 @@ formHerramienta.addEventListener("submit", async function (event) {
 
     if (storageError) throw storageError;
 
-    // 3. Obtener la URL pública de la imagen
     const { data: publicUrlData } = supabase.storage
       .from(BUCKET_NAME)
       .getPublicUrl(fileName);
 
     imagen_url = publicUrlData.publicUrl;
-
-    // 4. Insertar la información de la herramienta (incluyendo la URL) en la Base de Datos
     const { error: dbError } = await supabase.from("herramientas").insert([
       {
         nombre: nombre,
@@ -164,13 +145,12 @@ formHerramienta.addEventListener("submit", async function (event) {
         descripcion: descripcion,
         fecha: fecha,
         reemplazos: reemplazos,
-        imagen_url: imagen_url, // URL de la imagen guardada
+        imagen_url: imagen_url,
       },
     ]);
 
     if (dbError) throw dbError;
 
-    // 5. Éxito: Limpiar, mostrar modal y recargar
     formHerramienta.reset();
 
     const successModal = new bootstrap.Modal(
@@ -180,28 +160,209 @@ formHerramienta.addEventListener("submit", async function (event) {
 
     setTimeout(() => {
       successModal.hide();
-      location.reload(); // Recarga para ver el nuevo inventario
+      location.reload();
     }, 2500);
   } catch (error) {
     console.error("❌ Error al procesar herramienta:", error);
-    // Si la subida fue exitosa pero la BD falló, es posible que quede un archivo huérfano.
     alert(
       `❌ Hubo un error al guardar la herramienta. Detalles: ${error.message}`
     );
   } finally {
-    // 6. Restaurar botón
     btnSpinner.classList.add("d-none");
     btnText.textContent = "Agregar herramienta";
     btnAgregar.disabled = false;
   }
 });
 
-// =================================================================
-// 🔄 FUNCIONES DE NAVEGACIÓN (Se mantienen)
-// =================================================================
 function mostrarSeccion(id) {
   const secciones = document.querySelectorAll(".seccion");
   secciones.forEach((sec) => (sec.style.display = "none"));
   const seccion = document.getElementById(id);
   if (seccion) seccion.style.display = "block";
 }
+
+document
+  .getElementById("formEdicion")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    // 1. Obtener datos y preparar elementos
+    const id = document.getElementById("modalId").value;
+    const estado = document.getElementById("modalEstadoEditable").value;
+    const descripcion = document.getElementById(
+      "modalDescripcionEditable"
+    ).value;
+    const nuevaImagenFile =
+      document.getElementById("modalNuevaImagen").files[0];
+
+    // 💡 Lógica de reemplazos: Leemos el valor actual (del campo readonly) y le sumamos 1
+    const reemplazosActuales = parseInt(
+      document.getElementById("modalReemplazosEditable").value
+    );
+    // CRUCIAL: Sumar 1 al contador de reemplazos
+    const nuevosReemplazos = reemplazosActuales + 1;
+
+    // 2. 🔹 Mostrar spinner y bloquear botón
+    const btnUpdate = document.querySelector(
+      "#formEdicion button[type='submit']"
+    );
+    const btnUpdateText = document.getElementById("btnUpdateText");
+    const btnUpdateSpinner = document.getElementById("btnUpdateSpinner");
+
+    btnUpdateSpinner.classList.remove("d-none");
+    btnUpdateText.textContent = "Actualizando...";
+    btnUpdate.disabled = true;
+
+    let imagen_url = document.getElementById("modalImagen").src;
+
+    try {
+      // 3. Subir la NUEVA imagen (si se seleccionó)
+      if (nuevaImagenFile) {
+        const fileName = `${Date.now()}_${id}_${nuevaImagenFile.name}`;
+
+        // Subir al Storage
+        const { error: storageError } = await supabase.storage
+          .from(BUCKET_NAME)
+          .upload(fileName, nuevaImagenFile, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (storageError) throw storageError;
+
+        // Obtener la URL pública de la nueva imagen
+        const { data: publicUrlData } = supabase.storage
+          .from(BUCKET_NAME)
+          .getPublicUrl(fileName);
+
+        imagen_url = publicUrlData.publicUrl;
+      }
+
+      // 4. Actualizar la información en la Base de Datos (UPDATE)
+      const { error: dbError } = await supabase
+        .from("herramientas")
+        .update({
+          estado: estado,
+          descripcion: descripcion,
+          reemplazos: nuevosReemplazos, // Envía el valor +1
+          imagen_url: imagen_url,
+        })
+        .eq("id", id) // Cláusula para actualizar solo la herramienta correcta
+        .select();
+
+      if (dbError) throw dbError;
+
+      // 5. Éxito: Ocultar modal, mostrar éxito y recargar
+      const infoModal = bootstrap.Modal.getInstance(
+        document.getElementById("infoModal")
+      );
+      infoModal.hide();
+
+      const successModal = new bootstrap.Modal(
+        document.getElementById("successModal")
+      );
+      successModal.show();
+
+      setTimeout(() => {
+        successModal.hide();
+        location.reload(); // Recargar para ver los datos actualizados
+      }, 1500);
+    } catch (error) {
+      console.error("❌ Error al actualizar herramienta:", error);
+      alert(
+        `❌ Hubo un error al actualizar la herramienta. Detalles: ${error.message}`
+      );
+    } finally {
+      // 6. Restaurar botón
+      btnUpdateSpinner.classList.add("d-none");
+      btnUpdateText.textContent = "Actualizar Información y Reemplazar (+1)";
+      btnUpdate.disabled = false;
+    }
+  });
+// =================================================================
+// 5. MANEJO DEL BOTÓN DE ELIMINAR (DELETE)
+// =================================================================
+// =================================================================
+// 5. MANEJO DEL BOTÓN DE ELIMINAR (DELETE) - MODIFICADO CON MODALES
+// =================================================================
+
+// Referencias a los nuevos modales
+const confirmDeleteModal = new bootstrap.Modal(
+  document.getElementById("confirmDeleteModal")
+);
+const deleteSuccessModal = new bootstrap.Modal(
+  document.getElementById("deleteSuccessModal")
+);
+
+let herramientaAEliminarId = null;
+let herramientaAEliminarUrl = null;
+
+// A) Listener para abrir el modal de confirmación (Botón "Eliminar Herramienta" en el Modal de Edición)
+document.getElementById("btnEliminar").addEventListener("click", function () {
+  // Capturamos el ID y la URL de la herramienta actualmente mostrada en el modal de edición
+  herramientaAEliminarId = document.getElementById("modalId").value;
+  herramientaAEliminarUrl = document.getElementById("modalImagen").src;
+
+  // Ocultamos el modal de edición/información
+  bootstrap.Modal.getInstance(document.getElementById("infoModal")).hide();
+
+  // Mostramos el modal de confirmación
+  confirmDeleteModal.show();
+});
+
+// B) Listener para ejecutar la eliminación (Botón "Sí, Eliminar" dentro del Modal de Confirmación)
+document
+  .getElementById("btnConfirmarEliminar")
+  .addEventListener("click", async function () {
+    // Ocultamos el modal de confirmación
+    confirmDeleteModal.hide();
+
+    const id = herramientaAEliminarId;
+    const currentImageUrl = herramientaAEliminarUrl;
+
+    // 2. 🔹 Mostrar spinner y bloquear botón (opcional, podrías usar solo el spinner del botón original, pero para simplificar lo omitiremos aquí para no complicar el flujo entre modales)
+
+    try {
+      // --- A. Extraer el nombre del archivo para borrarlo del Storage ---
+      const urlSegments = currentImageUrl.split("/");
+      const fileName = urlSegments[urlSegments.length - 1];
+
+      if (fileName && fileName !== "placeholder.jpg") {
+        const { error: storageError } = await supabase.storage
+          .from(BUCKET_NAME)
+          .remove([fileName]);
+
+        if (storageError) {
+          console.error(
+            "❌ Error al borrar archivo del Storage, pero se intentará borrar el registro:",
+            storageError.message
+          );
+        }
+      }
+
+      // --- B. Borrar la fila de la Base de Datos ---
+      const { error: dbError } = await supabase
+        .from("herramientas")
+        .delete()
+        .eq("id", id);
+
+      if (dbError) throw dbError;
+
+      // 3. Éxito: Mostrar modal de éxito y recargar
+      deleteSuccessModal.show();
+
+      // Limpiamos los datos temporales
+      herramientaAEliminarId = null;
+      herramientaAEliminarUrl = null;
+
+      setTimeout(() => {
+        deleteSuccessModal.hide();
+        location.reload();
+      }, 1500); // Mostrar modal de éxito por 1.5 segundos
+    } catch (error) {
+      console.error("❌ Error al eliminar herramienta:", error);
+      alert(
+        `❌ Hubo un error al eliminar la herramienta. Detalles: ${error.message}`
+      );
+    }
+  });

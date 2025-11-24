@@ -133,15 +133,98 @@
             ></button>
           </div>
           <div class="modal-body text-center">
-            <img id="modalImagen" src="" class="img-fluid mb-3" />
-            <p><strong>Estado:</strong> <span id="modalEstado"></span></p>
-            <p>
-              <strong>Descripción:</strong> <span id="modalDescripcion"></span>
-            </p>
-            <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
-            <p>
-              <strong>Reemplazos:</strong> <span id="modalReemplazos"></span>
-            </p>
+            <form id="formEdicion">
+              <input type="hidden" id="modalId" />
+
+              <img id="modalImagen" src="" class="img-fluid mb-3" />
+              <div class="mb-3">
+                <label for="modalNuevaImagen" class="form-label text-white"
+                  >Reemplazar Imagen (Opcional)</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="modalNuevaImagen"
+                  accept="image/*"
+                />
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="modalEstadoEditable" class="form-label text-white"
+                    >Estado:</label
+                  >
+                  <select
+                    class="form-control"
+                    id="modalEstadoEditable"
+                    required
+                  >
+                    <option value="Bueno">Bueno</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Malo">Malo</option>
+                    <option value="Necesita reemplazo">
+                      Necesita reemplazo
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label
+                    for="modalReemplazosEditable"
+                    class="form-label text-white"
+                    >Reemplazos:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="modalReemplazosEditable"
+                    readonly
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label
+                  for="modalDescripcionEditable"
+                  class="form-label text-white"
+                  >Descripción:</label
+                >
+                <textarea
+                  class="form-control"
+                  id="modalDescripcionEditable"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-danger w-50 me-2">
+                  <span id="btnUpdateText"
+                    >Actualizar Información y Reemplazar (+1)</span
+                  >
+                  <span
+                    id="btnUpdateSpinner"
+                    class="spinner-border spinner-border-sm ms-2 d-none"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+
+                <button
+                  type="button"
+                  id="btnEliminar"
+                  class="btn btn-secondary w-50 ms-2"
+                >
+                  <span id="btnDeleteText">Eliminar Herramienta</span>
+                  <span
+                    id="btnDeleteSpinner"
+                    class="spinner-border spinner-border-sm ms-2 d-none"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -155,6 +238,71 @@
               <i class="bi bi-check-circle-fill"></i>
             </div>
             <h5>¡Se guardó exitosamente!</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="confirmDeleteModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content text-bg-dark">
+          <div class="modal-header border-bottom-0">
+            <h5 class="modal-title text-danger">⚠️ Confirmar Eliminación</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p>
+              ¿Estás seguro de que quieres **eliminar esta herramienta**? Esta
+              acción es **irreversible**.
+            </p>
+          </div>
+          <div class="modal-footer border-top-0 justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              id="btnConfirmarEliminar"
+              class="btn btn-danger"
+            >
+              Sí, Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="deleteSuccessModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content custom-success-modal">
+          <div class="modal-body text-center">
+            <div class="mb-3">
+              <i
+                class="bi bi-check-circle-fill text-success"
+                style="font-size: 2rem"
+              ></i>
+            </div>
+            <h5>¡Herramienta Eliminada!</h5>
+            <p class="text-white-50">
+              El registro y su imagen han sido borrados.
+            </p>
           </div>
         </div>
       </div>
