@@ -1,116 +1,236 @@
-.card {
-  flex: 1 1 calc(50% - 20px); /* 2 por fila */
+:root {
+  /* Variables para un manejo más fácil del color */
+  --color-primary: #007bff; /* Color de acento moderno (azul) */
+  --color-dark-bg-start: #1a1a2e; /* Color de inicio del degradado oscuro */
+  --color-dark-bg-end: #16213e; /* Color de fin del degradado oscuro */
+  --color-card-bg: #2a2a2a; /* Fondo de tarjetas, formularios y modales */
+  --color-text-light: #f5f5f5; /* Texto claro */
+  --color-text-muted: #b0b0b0; /* Texto secundario */
+  --shadow-key: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra estándar oscura */
+  --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.8); /* Sombra más intensa al pasar el ratón */
+  --border-radius-lg: 16px;
 }
 
-@media (max-width: 600px) {
-  .card {
-    flex: 1 1 100%; /* En móvil se hace 1 por fila */
-  }
-}
-h5 {
-  color: white;
-}
+/* --- Estilos de Layout y Cuerpo --- */
 body {
-  background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
-  background-attachment: fixed;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
+  /* Fondo degradado sutil y moderno */
+  background: linear-gradient(
+    135deg,
+    var(--color-dark-bg-start) 0%,
+    var(--color-dark-bg-end) 100%
+  );
+  background-attachment: fixed; /* Mantiene el degradado fijo al hacer scroll */
+  color: var(--color-text-light);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  line-height: 1.6;
+  padding-top: 56px;
+  min-height: 100vh; /* Asegura que el degradado cubra toda la altura */
 }
 
+/* El resto de tu CSS se mantiene igual */
+h2 {
+  font-weight: 700;
+  color: var(--color-primary); /* Título de sección con acento */
+}
+
+h5 {
+  color: var(--color-text-light);
+  font-weight: 600; /* Un poco más de grosor */
+}
+
+/* Clase para dar fondo de tarjeta al formulario de ingreso */
+.bg-card-dark {
+  background-color: var(--color-card-bg);
+  box-shadow: var(--shadow-key);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* --- Navbar (Estilo limpio) --- */
 .navbar-brand {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 2rem;
   text-align: center;
+  color: var(
+    --color-primary
+  ) !important; /* Color de marca moderno, por ejemplo, el acento */
 }
 
+.navbar-dark .navbar-nav .nav-link {
+  color: var(--color-text-muted) !important; /* Más sutil */
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+  position: relative;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+  color: var(--color-text-light) !important;
+}
+
+/* Línea sutil al hacer hover en el nav-link */
+.navbar-dark .navbar-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease-out, left 0.3s ease-out;
+}
+.navbar-dark .navbar-nav .nav-link:hover::after,
+.navbar-dark .navbar-nav .nav-link.active::after {
+  width: 100%;
+  left: 0;
+}
+
+/* --- Tarjetas (Cards) - El cambio más significativo --- */
 .card {
-  transition: transform 0.2s, box-shadow 0.2s;
-  border-radius: 12px;
+  flex: 1 1 calc(50% - 20px);
+  /* Estilo base moderno y oscuro */
+  background-color: var(--color-card-bg);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
-  box-shadow: 0 8px 12px rgb(255, 255, 255);
-  background-color: #cccccc;
+  box-shadow: var(--shadow-key);
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Borde sutil */
+  margin-bottom: 20px;
 }
 
 .card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 12px rgb(255, 0, 0);
+  /* Efecto de 'levantamiento' con sombra de acento sutil */
+  transform: translateY(-8px) scale(1.02); /* Levanta un poco más y agranda sutilmente */
+  box-shadow: 0 12px 30px rgba(0, 123, 255, 0.5); /* Sombra usando el color de acento */
 }
 
 .card img {
-  height: 180px; /* Ajustamos altura */
-  object-fit: cover; /* Mantener proporción y recortar si es necesario */
-  width: 100%; /* Que ocupe todo el ancho de la card */
-  background-color: #cccccc;
+  height: 200px; /* Un poco más de altura */
+  object-fit: cover;
+  width: 100%;
+  /* Aseguramos que la imagen no tenga un fondo visible */
+  background-color: transparent;
 }
 
 .card-title {
   text-align: center;
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-.navbar-dark .navbar-nav .nav-link {
-  color: #cccccc !important;
+  font-size: 1.25rem; /* Más prominente */
+  font-weight: 600;
+  color: var(--color-text-light);
+  padding: 15px 10px 0;
 }
 
-.navbar-dark .navbar-nav .nav-link:hover {
-  color: #ffffff !important;
+/* Media Query se mantiene para responsividad */
+@media (max-width: 600px) {
+  .card {
+    flex: 1 1 100%;
+  }
 }
+
+/* --- FORMULARIOS (Inputs y Labels) --- */
 label {
-  color: white;
+  color: var(--color-text-light);
+  font-weight: 500;
 }
 
-.custom-success-modal {
-  background-color: #161616; /* gris clarito */
-  text-align: center;
-  border: none;
-  border-radius: 12px; /* bordes redondeados */
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+.form-control,
+.form-select {
+  background-color: #383838; /* Fondo más claro que la card, pero oscuro */
+  color: var(--color-text-light);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s;
 }
-.custom-success-modal h5 {
-  font-weight: bold;
-  color: #ffffff;
-  margin-top: 10px;
+
+.form-control:focus,
+.form-select:focus {
+  background-color: #3e3e3e;
+  color: var(--color-text-light);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
 }
-/* Modal de información */
+
+/* Estilo para los placeholders */
+::placeholder {
+  color: var(--color-text-muted) !important;
+  opacity: 1; /* Para navegadores que manipulan la opacidad del placeholder */
+}
+
+/* Botones personalizados para usar el color primario */
+.btn-primary {
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: #0056b3;
+  --bs-btn-hover-border-color: #0056b3;
+  --bs-btn-active-bg: #004085;
+  --bs-btn-active-border-color: #004085;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-danger {
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+/* --- Modales de Información (custom-info-modal) --- */
 .custom-info-modal {
-  background-color: #2c2f33; /* gris oscuro */
-  color: #f8f9fa; /* texto claro */
-}
-.custom-info-modal {
-  background-color: #2c2f33;
-  color: #f8f9fa;
+  background-color: var(--color-card-bg); /* Fondo de modal consistente */
+  color: var(--color-text-light);
   border: none;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgb(255, 255, 255);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-hover);
 }
 
 .custom-info-modal .modal-header {
-  border-bottom: 1px solid rgb(255, 0, 0);
+  /* Borde más sutil o usando el acento */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
 }
 
 .custom-info-modal .modal-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-light);
 }
 
 .custom-info-modal .btn-close {
   filter: invert(1); /* X blanca */
+  opacity: 0.8;
 }
 
 .custom-info-modal img {
-  max-height: 300px;
+  max-height: 350px;
   object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgb(255, 255, 255);
+  border-radius: 12px;
+  /* Sombra sutil para destacar la imagen */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
 .custom-info-modal p {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.05rem;
 }
 
 .custom-info-modal strong {
-  color: #ffffff; /* azul brillante */
+  color: var(
+    --color-primary
+  ); /* Las etiquetas importantes usan el color de acento */
+  font-weight: 600;
+}
+
+/* --- Modales de Éxito/Transacción (custom-success-modal) --- */
+.custom-success-modal {
+  /* Fondo más oscuro y coherente con el modo oscuro */
+  background-color: var(--color-card-bg);
+  text-align: center;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  padding: 30px; /* Más padding */
+  box-shadow: var(--shadow-hover); /* Sombra intensa */
+}
+.custom-success-modal h5 {
+  font-weight: 700;
+  color: var(--color-primary); /* Título de éxito con color de acento */
+  margin-top: 10px;
 }
