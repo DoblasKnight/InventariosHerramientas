@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8" />
-    <title>Inventario Profesional</title>
+    <title>Inventario Pro</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -18,9 +18,8 @@
         --primary: #4f46e5;
         --accent: #7c3aed;
         --bg-dark: #0f172a;
-        --card-glass: rgba(30, 41, 59, 0.8);
+        --card-glass: rgba(30, 41, 59, 0.95);
         --text-bright: #ffffff;
-        --text-muted: #cbd5e1;
       }
 
       body {
@@ -34,22 +33,23 @@
 
       /* Navbar */
       .navbar {
-        background: rgba(15, 23, 42, 0.9) !important;
+        background: rgba(15, 23, 42, 0.95) !important;
         backdrop-filter: blur(15px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       .navbar-brand {
         font-weight: 800;
         color: var(--text-bright) !important;
+        letter-spacing: 1px;
       }
 
       /* Tarjetas */
       .card {
         background: var(--card-glass);
-        backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
         transition: 0.3s;
+        cursor: pointer;
       }
       .card:hover {
         transform: translateY(-5px);
@@ -59,6 +59,7 @@
         height: 180px;
         object-fit: cover;
         border-radius: 20px 20px 0 0;
+        background: #000;
       }
       .card-title {
         color: var(--text-bright);
@@ -66,7 +67,7 @@
         margin: 0;
       }
 
-      /* Inputs */
+      /* Formularios */
       .form-section {
         background: var(--card-glass);
         border-radius: 24px;
@@ -75,9 +76,8 @@
       }
       label {
         color: var(--text-bright);
-        font-weight: 600;
-        margin-bottom: 5px;
-        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 8px;
       }
       .form-control,
       .form-select {
@@ -85,9 +85,15 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
         color: white !important;
         border-radius: 12px;
+        padding: 12px;
+      }
+      .form-control:focus {
+        background: #0f172a;
+        border-color: var(--primary);
+        box-shadow: none;
       }
 
-      /* Cámara Area */
+      /* Cámara */
       .photo-area {
         border: 2px dashed var(--primary);
         border-radius: 15px;
@@ -95,7 +101,6 @@
         text-align: center;
         background: rgba(79, 70, 229, 0.1);
         position: relative;
-        cursor: pointer;
       }
       .photo-area i {
         font-size: 2.5rem;
@@ -111,35 +116,39 @@
         cursor: pointer;
       }
 
-      /* Botones */
+      /* Botones y Modales */
       .btn-primary {
         background: linear-gradient(45deg, var(--primary), var(--accent));
         border: none;
         border-radius: 12px;
         font-weight: 700;
       }
-      .btn-config {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-      }
-
       .modal-content {
         background: #1e293b;
         color: white;
         border-radius: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
       .btn-close {
         filter: invert(1);
       }
       .status-tag {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         font-weight: 800;
-        padding: 4px 10px;
+        padding: 4px 12px;
         border-radius: 8px;
         text-transform: uppercase;
         background: var(--primary);
+        color: white;
+      }
+
+      /* Notificación Toast */
+      .custom-toast {
+        background: var(--primary);
+        color: white;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
       }
     </style>
   </head>
@@ -149,28 +158,29 @@
         <a class="navbar-brand" href="#">INVENTARIO</a>
         <div class="d-flex gap-2">
           <button
-            class="btn btn-sm text-white"
+            class="btn btn-sm text-white fw-bold"
             onclick="switchTab('galeriaContainer')"
           >
-            Lista
+            LISTA
           </button>
           <button
-            class="btn btn-primary btn-sm px-3"
+            class="btn btn-primary btn-sm px-4"
             onclick="switchTab('ingresar')"
           >
             NUEVO
-          </button>
-          <button class="btn btn-config btn-sm px-2" onclick="showConfig()">
-            <i class="bi bi-gear-fill"></i>
           </button>
         </div>
       </div>
     </nav>
 
     <div class="container py-4 seccion" id="galeriaContainer">
-      <h3 class="fw-bold mb-4">Herramientas</h3>
-      <div id="loader" class="text-center py-5" style="display: none">
-        <div class="spinner-border text-primary"></div>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold m-0 text-white">Herramientas</h3>
+        <div
+          id="loader"
+          class="spinner-border spinner-border-sm text-primary"
+          style="display: none"
+        ></div>
       </div>
       <div class="row g-4" id="galeria"></div>
     </div>
@@ -179,28 +189,46 @@
       <div class="row justify-content-center">
         <div class="col-lg-6">
           <div class="form-section shadow-lg">
-            <h3 class="fw-bold mb-4">Nuevo Registro</h3>
+            <h3 class="fw-bold mb-4 text-center">Nuevo Registro</h3>
             <form id="formHerramienta">
               <div class="mb-3">
-                <label>Nombre</label>
-                <input type="text" id="nombre" class="form-control" required />
+                <label>Nombre del Objeto</label
+                ><input
+                  type="text"
+                  id="nombre"
+                  class="form-control"
+                  placeholder="Ej. Taladro"
+                  required
+                />
               </div>
               <div class="row">
                 <div class="col-6 mb-3">
                   <label>Estado</label>
-                  <select id="estado" class="form-select"></select>
+                  <select id="estado" class="form-select">
+                    <option value="Bueno">Bueno</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Malo">Malo</option>
+                  </select>
                 </div>
                 <div class="col-6 mb-3">
-                  <label>Fecha</label>
-                  <input type="date" id="fecha" class="form-control" required />
+                  <label>Fecha</label
+                  ><input
+                    type="date"
+                    id="fecha"
+                    class="form-control"
+                    required
+                  />
                 </div>
               </div>
               <div class="mb-3 text-center">
-                <label>Capturar Foto</label>
+                <label>Foto</label>
                 <div class="photo-area">
                   <i class="bi bi-camera-fill"></i>
-                  <p id="fileNameDisplay" class="m-0 mt-2 small">
-                    Toca para abrir cámara
+                  <p
+                    id="fileNameDisplay"
+                    class="m-0 mt-2 small fw-bold text-white"
+                  >
+                    Toca para TOMAR FOTO
                   </p>
                   <input
                     type="file"
@@ -212,11 +240,12 @@
                 </div>
               </div>
               <div class="mb-4">
-                <label>Descripción</label>
-                <textarea
+                <label>Descripción</label
+                ><textarea
                   id="descripcion"
                   class="form-control"
                   rows="2"
+                  placeholder="Detalles..."
                 ></textarea>
               </div>
               <button
@@ -224,45 +253,9 @@
                 id="btnAgregar"
                 class="btn btn-primary w-100 py-3"
               >
-                GUARDAR EN BASE DE DATOS
+                SUBIR A BASE DE DATOS
               </button>
             </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="configModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <h5 class="fw-bold">Opciones de Estado</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body p-4">
-            <div class="mb-3">
-              <label>Agregar nueva opción (ej: En Reparación)</label>
-              <div class="input-group">
-                <input
-                  type="text"
-                  id="nuevoEstado"
-                  class="form-control"
-                  placeholder="Nombre del estado"
-                />
-                <button class="btn btn-primary" onclick="addEstadoOp()">
-                  Añadir
-                </button>
-              </div>
-            </div>
-            <label>Estados actuales:</label>
-            <ul
-              id="listaEstados"
-              class="list-group list-group-flush rounded-3 mt-2"
-            ></ul>
           </div>
         </div>
       </div>
@@ -290,12 +283,17 @@
               />
               <div class="row g-2 mb-3">
                 <div class="col-6">
-                  <label class="small text-muted mb-1">Estado</label>
-                  <select id="modalEstadoEditable" class="form-select"></select>
+                  <label class="small text-white-50 mb-1 fw-bold">Estado</label>
+                  <select id="modalEstadoEditable" class="form-select">
+                    <option value="Bueno">Bueno</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Malo">Malo</option>
+                  </select>
                 </div>
                 <div class="col-6">
-                  <label class="small text-muted mb-1">Reemplazos</label>
-                  <input
+                  <label class="small text-white-50 mb-1 fw-bold"
+                    >Reemplazos</label
+                  ><input
                     type="number"
                     id="modalReemplazosEditable"
                     class="form-control"
@@ -304,8 +302,9 @@
                 </div>
               </div>
               <div class="mb-4">
-                <label class="small text-muted mb-1">Descripción</label>
-                <textarea
+                <label class="small text-white-50 mb-1 fw-bold"
+                  >Descripción</label
+                ><textarea
                   id="modalDescripcionEditable"
                   class="form-control"
                   rows="2"
@@ -317,8 +316,8 @@
                 </button>
                 <button
                   type="button"
-                  id="btnEliminar"
                   class="btn btn-outline-danger"
+                  onclick="abrirConfirmacionBorrado()"
                 >
                   <i class="bi bi-trash"></i>
                 </button>
@@ -329,16 +328,56 @@
       </div>
     </div>
 
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content text-center">
+          <div class="modal-body p-4">
+            <i class="bi bi-exclamation-circle text-warning display-4 mb-3"></i>
+            <h5 class="fw-bold">¿Borrar registro?</h5>
+            <p class="small text-white-50">Esta acción no se puede deshacer.</p>
+            <div class="d-flex gap-2 justify-content-center mt-4">
+              <button class="btn btn-secondary w-50" data-bs-dismiss="modal">
+                Cancelar
+              </button>
+              <button
+                class="btn btn-danger w-50"
+                onclick="borrarDefinitivamente()"
+              >
+                Borrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div
+        id="liveToast"
+        class="toast custom-toast border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex p-3">
+          <div id="toastMsg" class="toast-body"></div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+          ></button>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-      const _URL = "https://cfhyghkszfkktdlqdaqy.supabase.co";
-      const _KEY = "sb_publishable_pYd42nEtQuJU7yX6eJuhMA_8wQCXA5m";
+      const _URL = "https://trebtgrojfwfvpckyhpr.supabase.co";
+      const _KEY = "sb_publishable_vCabnmPg9X_YpqPBlxUXiw__KzqJJpY";
       const sb = supabase.createClient(_URL, _KEY);
       const BUCKET = "imagenes-herramientas";
-
-      let opcionesEstado = ["Bueno", "Regular", "Malo"];
 
       function switchTab(id) {
         document
@@ -346,64 +385,19 @@
           .forEach((s) => (s.style.display = "none"));
         document.getElementById(id).style.display = "block";
         if (id === "galeriaContainer") fetchAll();
-        updateStateSelectors();
       }
 
-      function updateStateSelectors() {
-        const selects = [
-          document.getElementById("estado"),
-          document.getElementById("modalEstadoEditable"),
-        ];
-        selects.forEach((sel) => {
-          const valActual = sel.value;
-          sel.innerHTML = opcionesEstado
-            .map((o) => `<option value="${o}">${o}</option>`)
-            .join("");
-          if (valActual) sel.value = valActual;
-        });
-      }
-
-      function showConfig() {
-        const modal = new bootstrap.Modal(
-          document.getElementById("configModal"),
-        );
-        renderEstadosConfig();
-        modal.show();
-      }
-
-      function renderEstadosConfig() {
-        const lista = document.getElementById("listaEstados");
-        lista.innerHTML = opcionesEstado
-          .map(
-            (o, i) => `
-                <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center border-secondary">
-                    ${o}
-                    <button class="btn btn-sm btn-danger" onclick="removeEstadoOp(${i})"><i class="bi bi-x"></i></button>
-                </li>
-            `,
-          )
-          .join("");
-      }
-
-      function addEstadoOp() {
-        const val = document.getElementById("nuevoEstado").value.trim();
-        if (val) {
-          opcionesEstado.push(val);
-          document.getElementById("nuevoEstado").value = "";
-          renderEstadosConfig();
-          updateStateSelectors();
-        }
-      }
-
-      function removeEstadoOp(i) {
-        opcionesEstado.splice(i, 1);
-        renderEstadosConfig();
-        updateStateSelectors();
+      function showToast(msg) {
+        document.getElementById("toastMsg").innerText = msg;
+        bootstrap.Toast.getOrCreateInstance(
+          document.getElementById("liveToast"),
+        ).show();
       }
 
       document.getElementById("imagen").addEventListener("change", (e) => {
-        document.getElementById("fileNameDisplay").innerText =
-          e.target.files[0]?.name || "Foto capturada";
+        document.getElementById("fileNameDisplay").innerText = e.target.files[0]
+          ? "Foto lista ✔"
+          : "Toca para TOMAR FOTO";
       });
 
       async function fetchAll() {
@@ -419,26 +413,24 @@
         if (error) return;
         galeria.innerHTML = data.length
           ? ""
-          : '<div class="col-12 text-center text-muted py-5">No hay herramientas</div>';
+          : '<div class="col-12 text-center text-muted py-5">No hay herramientas registradas.</div>';
 
         data.forEach((h) => {
           const col = document.createElement("div");
           col.className = "col-6 col-md-4 col-lg-3";
           col.innerHTML = `
-                    <div class="card h-100" onclick="showDetail(${JSON.stringify(h).replace(/"/g, "&quot;")})">
-                        <img src="${h.imagen_url || "https://via.placeholder.com/300"}" class="card-img-top">
+                    <div class="card h-100 shadow-lg" onclick="showDetail(${JSON.stringify(h).replace(/"/g, "&quot;")})">
+                        <img src="${h.imagen_url}" class="card-img-top" onerror="this.src='https://via.placeholder.com/300?text=Error+Carga'">
                         <div class="card-body text-center p-3">
                             <h6 class="card-title text-truncate mb-2">${h.nombre}</h6>
                             <span class="status-tag">${h.estado}</span>
                         </div>
-                    </div>
-                `;
+                    </div>`;
           galeria.appendChild(col);
         });
       }
 
       function showDetail(h) {
-        updateStateSelectors();
         document.getElementById("modalId").value = h.id;
         document.getElementById("modalNombre").innerText = h.nombre;
         document.getElementById("modalImagen").src = h.imagen_url;
@@ -454,16 +446,25 @@
         e.preventDefault();
         const btn = document.getElementById("btnAgregar");
         btn.disabled = true;
+        btn.innerText = "Subiendo...";
 
         try {
           const file = document.getElementById("imagen").files[0];
           const fileName = `${Date.now()}_${file.name}`;
-          await sb.storage.from(BUCKET).upload(fileName, file);
+
+          // Subir imagen
+          const { error: storageErr } = await sb.storage
+            .from(BUCKET)
+            .upload(fileName, file);
+          if (storageErr) throw storageErr;
+
+          // URL pública
           const { data: urlData } = sb.storage
             .from(BUCKET)
             .getPublicUrl(fileName);
 
-          await sb.from("herramientas").insert([
+          // Guardar en BD
+          const { error: dbErr } = await sb.from("herramientas").insert([
             {
               nombre: document.getElementById("nombre").value,
               estado: document.getElementById("estado").value,
@@ -474,21 +475,27 @@
             },
           ]);
 
+          if (dbErr) throw dbErr;
+
+          showToast("¡Herramienta guardada!");
           e.target.reset();
           document.getElementById("fileNameDisplay").innerText =
-            "Toca para abrir cámara";
-          switchTab("galeriaContainer");
+            "Toca para TOMAR FOTO";
+          setTimeout(() => {
+            switchTab("galeriaContainer");
+          }, 1000);
         } catch (err) {
-          alert("Error al subir");
+          showToast("Error al guardar.");
         } finally {
           btn.disabled = false;
+          btn.innerText = "SUBIR A BASE DE DATOS";
         }
       };
 
       document.getElementById("formEdicion").onsubmit = async (e) => {
         e.preventDefault();
         const id = document.getElementById("modalId").value;
-        const currentR = parseInt(
+        const r = parseInt(
           document.getElementById("modalReemplazosEditable").value,
         );
 
@@ -498,30 +505,44 @@
             estado: document.getElementById("modalEstadoEditable").value,
             descripcion: document.getElementById("modalDescripcionEditable")
               .value,
-            reemplazos: currentR + 1,
+            reemplazos: r + 1,
           })
           .eq("id", id);
 
         bootstrap.Modal.getInstance(
           document.getElementById("infoModal"),
         ).hide();
+        showToast("Actualizado (+1 Reemplazo)");
         fetchAll();
       };
 
-      document.getElementById("btnEliminar").onclick = async () => {
-        if (!confirm("¿Borrar permanentemente?")) return;
-        await sb
-          .from("herramientas")
-          .delete()
-          .eq("id", document.getElementById("modalId").value);
+      // --- LÓGICA DE BORRADO SIN ALERTAS ---
+      let idParaBorrar = null;
+
+      function abrirConfirmacionBorrado() {
+        // Guardamos el ID que queremos borrar
+        idParaBorrar = document.getElementById("modalId").value;
+        // Cerramos el modal de info
         bootstrap.Modal.getInstance(
           document.getElementById("infoModal"),
         ).hide();
-        fetchAll();
-      };
+        // Abrimos el modal de confirmación
+        new bootstrap.Modal(document.getElementById("deleteModal")).show();
+      }
 
-      // Inicio
-      updateStateSelectors();
+      async function borrarDefinitivamente() {
+        if (!idParaBorrar) return;
+
+        await sb.from("herramientas").delete().eq("id", idParaBorrar);
+
+        // Cerrar modal de confirmación
+        bootstrap.Modal.getInstance(
+          document.getElementById("deleteModal"),
+        ).hide();
+        showToast("Registro eliminado.");
+        fetchAll();
+      }
+
       fetchAll();
     </script>
   </body>
