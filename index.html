@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8" />
-    <title>Inventario Pro</title>
+    <title>Inventario Profesional</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -18,48 +18,42 @@
         --primary: #4f46e5;
         --accent: #7c3aed;
         --bg-dark: #0f172a;
-        --card-glass: rgba(30, 41, 59, 0.7);
-        --text-bright: #ffffff; /* Blanco puro para legibilidad */
-        --text-muted: #cbd5e1; /* Gris claro para detalles */
+        --card-glass: rgba(30, 41, 59, 0.8);
+        --text-bright: #ffffff;
+        --text-muted: #cbd5e1;
       }
 
       body {
         background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
         background-attachment: fixed;
         color: var(--text-bright);
-        font-family:
-          "Segoe UI",
-          system-ui,
-          -apple-system,
-          sans-serif;
+        font-family: "Segoe UI", system-ui, sans-serif;
         padding-top: 80px;
         min-height: 100vh;
       }
 
-      /* Navbar Transparente */
+      /* Navbar */
       .navbar {
-        background: rgba(15, 23, 42, 0.8) !important;
+        background: rgba(15, 23, 42, 0.9) !important;
         backdrop-filter: blur(15px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       .navbar-brand {
         font-weight: 800;
         color: var(--text-bright) !important;
-        letter-spacing: 1px;
       }
 
-      /* Tarjetas Estilo Glass */
+      /* Tarjetas */
       .card {
         background: var(--card-glass);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
-        transition: all 0.3s ease;
+        transition: 0.3s;
       }
       .card:hover {
-        transform: translateY(-8px);
+        transform: translateY(-5px);
         border-color: var(--primary);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
       }
       .card-img-top {
         height: 180px;
@@ -69,10 +63,10 @@
       .card-title {
         color: var(--text-bright);
         font-weight: 700;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        margin: 0;
       }
 
-      /* Inputs y Formulario */
+      /* Inputs */
       .form-section {
         background: var(--card-glass);
         border-radius: 24px;
@@ -82,42 +76,29 @@
       label {
         color: var(--text-bright);
         font-weight: 600;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
       }
       .form-control,
       .form-select {
-        background: rgba(15, 23, 42, 0.6);
+        background: rgba(15, 23, 42, 0.8);
         border: 1px solid rgba(255, 255, 255, 0.2);
         color: white !important;
         border-radius: 12px;
-        padding: 12px;
-      }
-      .form-control::placeholder {
-        color: #94a3b8;
-      }
-      .form-control:focus {
-        background: rgba(15, 23, 42, 0.8);
-        border-color: var(--primary);
-        box-shadow: none;
       }
 
-      /* Cargador de Foto Pro */
+      /* Cámara Area */
       .photo-area {
-        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border: 2px dashed var(--primary);
         border-radius: 15px;
         padding: 25px;
         text-align: center;
-        background: rgba(255, 255, 255, 0.03);
-        cursor: pointer;
+        background: rgba(79, 70, 229, 0.1);
         position: relative;
-        transition: 0.3s;
-      }
-      .photo-area:hover {
-        border-color: var(--primary);
-        background: rgba(255, 255, 255, 0.07);
+        cursor: pointer;
       }
       .photo-area i {
-        font-size: 2rem;
+        font-size: 2.5rem;
         color: var(--primary);
       }
       #imagen {
@@ -136,32 +117,29 @@
         border: none;
         border-radius: 12px;
         font-weight: 700;
-        padding: 12px;
+      }
+      .btn-config {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
       }
 
-      /* Notificaciones y Modales */
       .modal-content {
         background: #1e293b;
         color: white;
         border-radius: 25px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
       }
       .btn-close {
         filter: invert(1);
       }
-      .custom-toast {
-        background: var(--primary);
-        color: white;
-        border-radius: 12px;
-      }
-
-      /* Badges de Estado */
       .status-tag {
         font-size: 0.7rem;
         font-weight: 800;
         padding: 4px 10px;
         border-radius: 8px;
         text-transform: uppercase;
+        background: var(--primary);
       }
     </style>
   </head>
@@ -182,18 +160,17 @@
           >
             NUEVO
           </button>
+          <button class="btn btn-config btn-sm px-2" onclick="showConfig()">
+            <i class="bi bi-gear-fill"></i>
+          </button>
         </div>
       </div>
     </nav>
 
     <div class="container py-4 seccion" id="galeriaContainer">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold m-0">Herramientas</h3>
-        <div
-          id="loader"
-          class="spinner-border spinner-border-sm text-primary"
-          style="display: none"
-        ></div>
+      <h3 class="fw-bold mb-4">Herramientas</h3>
+      <div id="loader" class="text-center py-5" style="display: none">
+        <div class="spinner-border text-primary"></div>
       </div>
       <div class="row g-4" id="galeria"></div>
     </div>
@@ -202,40 +179,36 @@
       <div class="row justify-content-center">
         <div class="col-lg-6">
           <div class="form-section shadow-lg">
-            <h3 class="fw-bold mb-4 text-center">Registro de Equipo</h3>
+            <h3 class="fw-bold mb-4">Nuevo Registro</h3>
             <form id="formHerramienta">
               <div class="mb-3">
                 <label>Nombre</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  class="form-control"
-                  placeholder="Nombre de la herramienta"
-                  required
-                />
+                <input type="text" id="nombre" class="form-control" required />
               </div>
               <div class="row">
                 <div class="col-6 mb-3">
                   <label>Estado</label>
-                  <select id="estado" class="form-select">
-                    <option value="Bueno">Bueno ✅</option>
-                    <option value="Regular">Regular ⚠️</option>
-                    <option value="Malo">Malo ❌</option>
-                  </select>
+                  <select id="estado" class="form-select"></select>
                 </div>
                 <div class="col-6 mb-3">
                   <label>Fecha</label>
                   <input type="date" id="fecha" class="form-control" required />
                 </div>
               </div>
-              <div class="mb-3">
-                <label>Foto de la Herramienta</label>
+              <div class="mb-3 text-center">
+                <label>Capturar Foto</label>
                 <div class="photo-area">
-                  <i class="bi bi-cloud-arrow-up"></i>
-                  <p id="fileNameDisplay" class="m-0 mt-2 small text-muted">
-                    Haz clic para elegir imagen
+                  <i class="bi bi-camera-fill"></i>
+                  <p id="fileNameDisplay" class="m-0 mt-2 small">
+                    Toca para abrir cámara
                   </p>
-                  <input type="file" id="imagen" accept="image/*" required />
+                  <input
+                    type="file"
+                    id="imagen"
+                    accept="image/*"
+                    capture="environment"
+                    required
+                  />
                 </div>
               </div>
               <div class="mb-4">
@@ -244,15 +217,14 @@
                   id="descripcion"
                   class="form-control"
                   rows="2"
-                  placeholder="Detalles técnicos..."
                 ></textarea>
               </div>
               <button
                 type="submit"
                 id="btnAgregar"
-                class="btn btn-primary w-100 py-3 shadow"
+                class="btn btn-primary w-100 py-3"
               >
-                GUARDAR REGISTRO
+                GUARDAR EN BASE DE DATOS
               </button>
             </form>
           </div>
@@ -260,9 +232,45 @@
       </div>
     </div>
 
+    <div class="modal fade" id="configModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5 class="fw-bold">Opciones de Estado</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label>Agregar nueva opción (ej: En Reparación)</label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="nuevoEstado"
+                  class="form-control"
+                  placeholder="Nombre del estado"
+                />
+                <button class="btn btn-primary" onclick="addEstadoOp()">
+                  Añadir
+                </button>
+              </div>
+            </div>
+            <label>Estados actuales:</label>
+            <ul
+              id="listaEstados"
+              class="list-group list-group-flush rounded-3 mt-2"
+            ></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content shadow-2xl">
+        <div class="modal-content">
           <div class="modal-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h4 class="fw-bold m-0" id="modalNombre"></h4>
@@ -277,18 +285,13 @@
               <img
                 id="modalImagen"
                 src=""
-                class="rounded-4 w-100 mb-3 border border-secondary"
-                style="height: 240px; object-fit: cover"
+                class="rounded-4 w-100 mb-3"
+                style="height: 220px; object-fit: cover; border: 1px solid #444"
               />
-
               <div class="row g-2 mb-3">
                 <div class="col-6">
                   <label class="small text-muted mb-1">Estado</label>
-                  <select id="modalEstadoEditable" class="form-select">
-                    <option value="Bueno">Bueno</option>
-                    <option value="Regular">Regular</option>
-                    <option value="Malo">Malo</option>
-                  </select>
+                  <select id="modalEstadoEditable" class="form-select"></select>
                 </div>
                 <div class="col-6">
                   <label class="small text-muted mb-1">Reemplazos</label>
@@ -310,37 +313,18 @@
               </div>
               <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary flex-grow-1">
-                  Actualizar +1
+                  ACTUALIZAR +1
                 </button>
                 <button
                   type="button"
                   id="btnEliminar"
-                  class="btn btn-outline-danger px-3"
+                  class="btn btn-outline-danger"
                 >
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
             </form>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-      <div
-        id="liveToast"
-        class="toast custom-toast border-0"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-      >
-        <div class="d-flex p-2">
-          <div class="toast-body fw-bold" id="toastMsg"></div>
-          <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-          ></button>
         </div>
       </div>
     </div>
@@ -354,52 +338,90 @@
       const sb = supabase.createClient(_URL, _KEY);
       const BUCKET = "imagenes-herramientas";
 
+      let opcionesEstado = ["Bueno", "Regular", "Malo"];
+
       function switchTab(id) {
         document
           .querySelectorAll(".seccion")
           .forEach((s) => (s.style.display = "none"));
         document.getElementById(id).style.display = "block";
         if (id === "galeriaContainer") fetchAll();
+        updateStateSelectors();
       }
 
-      function showToast(msg) {
-        document.getElementById("toastMsg").innerText = msg;
-        bootstrap.Toast.getOrCreateInstance(
-          document.getElementById("liveToast"),
-        ).show();
-      }
-
-      document
-        .getElementById("imagen")
-        .addEventListener("change", function (e) {
-          const fileName =
-            e.target.files[0]?.name || "Haz clic para elegir imagen";
-          document.getElementById("fileNameDisplay").innerText = fileName;
+      function updateStateSelectors() {
+        const selects = [
+          document.getElementById("estado"),
+          document.getElementById("modalEstadoEditable"),
+        ];
+        selects.forEach((sel) => {
+          const valActual = sel.value;
+          sel.innerHTML = opcionesEstado
+            .map((o) => `<option value="${o}">${o}</option>`)
+            .join("");
+          if (valActual) sel.value = valActual;
         });
+      }
+
+      function showConfig() {
+        const modal = new bootstrap.Modal(
+          document.getElementById("configModal"),
+        );
+        renderEstadosConfig();
+        modal.show();
+      }
+
+      function renderEstadosConfig() {
+        const lista = document.getElementById("listaEstados");
+        lista.innerHTML = opcionesEstado
+          .map(
+            (o, i) => `
+                <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center border-secondary">
+                    ${o}
+                    <button class="btn btn-sm btn-danger" onclick="removeEstadoOp(${i})"><i class="bi bi-x"></i></button>
+                </li>
+            `,
+          )
+          .join("");
+      }
+
+      function addEstadoOp() {
+        const val = document.getElementById("nuevoEstado").value.trim();
+        if (val) {
+          opcionesEstado.push(val);
+          document.getElementById("nuevoEstado").value = "";
+          renderEstadosConfig();
+          updateStateSelectors();
+        }
+      }
+
+      function removeEstadoOp(i) {
+        opcionesEstado.splice(i, 1);
+        renderEstadosConfig();
+        updateStateSelectors();
+      }
+
+      document.getElementById("imagen").addEventListener("change", (e) => {
+        document.getElementById("fileNameDisplay").innerText =
+          e.target.files[0]?.name || "Foto capturada";
+      });
 
       async function fetchAll() {
         const galeria = document.getElementById("galeria");
         const loader = document.getElementById("loader");
         loader.style.display = "block";
-
         const { data, error } = await sb
           .from("herramientas")
           .select("*")
           .order("created_at", { ascending: false });
         loader.style.display = "none";
 
-        if (error) return console.error(error);
+        if (error) return;
         galeria.innerHTML = data.length
           ? ""
-          : '<div class="col-12 text-center text-muted py-5">Sin datos</div>';
+          : '<div class="col-12 text-center text-muted py-5">No hay herramientas</div>';
 
         data.forEach((h) => {
-          const color =
-            h.estado === "Bueno"
-              ? "success"
-              : h.estado === "Regular"
-                ? "warning"
-                : "danger";
           const col = document.createElement("div");
           col.className = "col-6 col-md-4 col-lg-3";
           col.innerHTML = `
@@ -407,7 +429,7 @@
                         <img src="${h.imagen_url || "https://via.placeholder.com/300"}" class="card-img-top">
                         <div class="card-body text-center p-3">
                             <h6 class="card-title text-truncate mb-2">${h.nombre}</h6>
-                            <span class="status-tag bg-${color} text-dark">${h.estado}</span>
+                            <span class="status-tag">${h.estado}</span>
                         </div>
                     </div>
                 `;
@@ -416,6 +438,7 @@
       }
 
       function showDetail(h) {
+        updateStateSelectors();
         document.getElementById("modalId").value = h.id;
         document.getElementById("modalNombre").innerText = h.nombre;
         document.getElementById("modalImagen").src = h.imagen_url;
@@ -440,7 +463,7 @@
             .from(BUCKET)
             .getPublicUrl(fileName);
 
-          const { error } = await sb.from("herramientas").insert([
+          await sb.from("herramientas").insert([
             {
               nombre: document.getElementById("nombre").value,
               estado: document.getElementById("estado").value,
@@ -451,14 +474,12 @@
             },
           ]);
 
-          if (error) throw error;
-          showToast("¡Herramienta guardada!");
           e.target.reset();
           document.getElementById("fileNameDisplay").innerText =
-            "Haz clic para elegir imagen";
+            "Toca para abrir cámara";
           switchTab("galeriaContainer");
         } catch (err) {
-          showToast("Error al procesar.");
+          alert("Error al subir");
         } finally {
           btn.disabled = false;
         }
@@ -484,21 +505,23 @@
         bootstrap.Modal.getInstance(
           document.getElementById("infoModal"),
         ).hide();
-        showToast("Registro actualizado.");
         fetchAll();
       };
 
       document.getElementById("btnEliminar").onclick = async () => {
         if (!confirm("¿Borrar permanentemente?")) return;
-        const id = document.getElementById("modalId").value;
-        await sb.from("herramientas").delete().eq("id", id);
+        await sb
+          .from("herramientas")
+          .delete()
+          .eq("id", document.getElementById("modalId").value);
         bootstrap.Modal.getInstance(
           document.getElementById("infoModal"),
         ).hide();
-        showToast("Eliminado.");
         fetchAll();
       };
 
+      // Inicio
+      updateStateSelectors();
       fetchAll();
     </script>
   </body>
